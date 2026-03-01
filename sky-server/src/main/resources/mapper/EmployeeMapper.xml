@@ -1,5 +1,43 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--新增员工-->
 <mapper namespace="com.sky.mapper.EmployeeMapper">
+    <insert id="newEmployee">
+        <!-- 新增员工 -->
+        insert into employee(employee.id, employee.name, employee.username, employee.password, employee.phone, employee.sex, employee.id_number, employee.status, employee.create_time, employee.update_time, employee.create_user, employee.update_user) values (#{employee.id},#{employee.name},#{employee.username},#{employee.password},#{employee.phone},#{employee.sex},#{employee.idNumber},#{employee.status},#{employee.createTime},#{employee.updateTime},#{employee.createUser},#{employee.updateUser})
+    </insert>
+    <update id="update">
+        update employee
+        <set>
+            <if test="name != null">name = #{name},</if>
+            <if test="username != null">username = #{username},</if>
+            <if test="password != null">password = #{password},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="sex != null">sex = #{sex},</if>
+            <if test="idNumber != null">id_Number = #{idNumber},</if>
+            <if test="updateTime != null">update_Time = #{updateTime},</if>
+            <if test="updateUser != null">update_User = #{updateUser},</if>
+            <if test="status != null">status = #{status},</if>
+        </set>
+        <where>
+            and id=#{id}
+        </where>
+    </update>
+
+    <select id="pageQ" resultType="com.sky.entity.Employee">
+        <!-- 分页查询 -->
+        select * from employee
+        <where>
+            <if test="name != null and name != ''">
+                and name like concat('%',#{name},'%')
+            <!-- 动态SQL<where>会自动处理多余的and或or -->
+            </if>
+        </where>
+        order by updatetime
+
+    </select>
+    <select id="searchemp" resultType="com.sky.dto.EmployeeDTO">
+        select name,employee.username,sex,employee.id_number,employee.phone from employee where employee.id=#{id}
+    </select>
 </mapper>
